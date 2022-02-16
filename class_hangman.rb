@@ -8,29 +8,24 @@ class Hangman
   dictionary = File.readlines('dictionary.txt')
   DICTIONARY = dictionary.map!{|word| word.chomp}.delete_if{ |word| word.length < 5 || word.length > 12}
 
-  #attr_accessor :word, :letter_display, :display_grid, :incorrect_guesses, :tries
-
-  def initialize(word = select_word.split('') ,letter_display = [], display_grid = {}, incorrect_guesses = [], tries = 6)
-   
-    if File.exists?('game_save.txt')
-      puts 'Would you like to restart your last saved game?(y/n)'
-      ans = gets.chomp.downcase
-      if ans == 'y' 
-        from_yaml
-      elsif ans == 'n'
-      
-      else
-        puts "Invalid Input, please enter y or n"
-        Hangman.new
-      end
-    end
-    @word = word
-    @letter_display = letter_display
-    @display_grid = display_grid
-    @guess = ''
-    @incorrect_guesses = incorrect_guesses
-    @tries = tries
+  def initialize
     display_initial_message
+    game_status = new_or_saved
+    if game_status == 'new'
+      @word = select_word.split('') 
+      @letter_display = []
+      @display_grid = {}
+      @incorrect_guesses = []
+      @tries = 6
+    else
+      data = YAML.load File.read(game_status)
+      @word = data[:word]
+      @letter_display = data[:letter_display]
+      @display_grid = data[:display_grid]
+      @incorrect_guesses = data[:incorrect_guesses]
+      @tries = data[:tries]
+    end
+    @guess = ''
     display
     get_input
   end
@@ -40,13 +35,36 @@ class Hangman
   end
 
   def display_initial_message
-    puts "\n Welcome to Hangman! You will have 6 tries to guess the word.\n"
+    puts "\nWelcome to Hangman!\n"
   end
 
- 
+  def new_or_saved
+    puts "\nWould you like to:
+    1) Start a new game
+    2) Resume a saved game"
 
-  
+    game_status = gets.chomp
+    if game_status == '2'
+      puts 'Choose one of the following games:'
+      saved_games = Dir.glob('saved_games/*')
+      saved_games.each { |file| puts file.delete_prefix("saved_games/").delete_suffix(".txt")}
+      get_game_name
+    elsif game_status == '1'
+      'new'
+    else
+      puts 'Invalid Input'
+      new_or_saved
+    end
+    
+  end
 
-
-
+  def get_game_name
+    name = gets.chomp
+    name = "saved_games/#{name}.txt"
+    unless File.exists?(name)
+      puts 'Invalid file name. Please enter name again'
+      get_game_name
+    end
+    name
+  end
 end

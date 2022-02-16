@@ -9,32 +9,35 @@ module Check
   end
 
   def incorrect
-    @tries -= 1
-    @incorrect_guesses << @guess   
-    case @tries
-    when 5
-      @display_grid[3][3] = '  O'
-    when 4
-      @display_grid[4][3] = '  |'
-      @display_grid[5][3] = '  |'
-    when 3
-      @display_grid[4][3] = " \\|"
-    when 2
-      @display_grid[4][3] = " \\|/"
-    when 1
-      @display_grid[6][3] = " /"
-    when 0
-      @display_grid[6][3] = " / \\"
-      display_final_grid
-      play_again?('lose')
-    end
-      display_final_grid
-      
+    if @incorrect_guesses.include?(@guess)
+      puts 'You have already tried this letter once'
       get_input
+    else
+      @tries -= 1
+      @incorrect_guesses << @guess   
+      case @tries
+      when 5
+        @display_grid[3][3] = '  O'
+      when 4
+        @display_grid[4][3] = '  |'
+        @display_grid[5][3] = '  |'
+      when 3
+        @display_grid[4][3] = " \\|"
+      when 2
+        @display_grid[4][3] = " \\|/"
+      when 1
+        @display_grid[6][3] = " /"
+      when 0
+        @display_grid[6][3] = " / \\"
+        display_final_grid
+        play_again?('lose')
+      end
+    end
+    display_final_grid
+    get_input
   end
 
   def correct(char, i)
     @letter_display[i] = "#{char}"
-    
   end
 end

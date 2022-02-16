@@ -6,7 +6,6 @@ module Output
     else
       display_final_grid
     end
-    
   end
 
   def defualt_display
@@ -24,7 +23,7 @@ module Output
     puts @letter_display.join('  ')
     puts "\nIncorrect guesses: #{@incorrect_guesses.join(' ')}" if @incorrect_guesses.length > 0
     unless @tries == 0 
-      save_game?
+      
     end
   end
 

@@ -1,9 +1,11 @@
 module Input
   def get_input
-    puts "\nEnter your guess, you have #{@tries} lives left:"
+    puts "\nEnter your guess or enter 'save' to save current game.\nYou have #{@tries} lives left"
     @guess = gets.chomp.upcase
-    if is_valid?(@guess) == false
-      puts "Invalid Input, please enter an alphabet"
+    if @guess == 'SAVE'
+      save
+    elsif is_valid?(@guess) == false 
+      puts "\nInvalid Input, please enter an alphabet"
       get_input
     else
       check_guess
@@ -11,10 +13,15 @@ module Input
   end
 
   def is_valid?(guess)
-    guess.match(/[A-Za-z]/) ? true : false
+    if guess.match(/[A-Za-z]/) && guess.length == 1
+      true
+    else 
+      false
+    end
+
   end
 
-  def save_game?
+=begin def save_game?
     puts "\nWould you like to save the game?(y/n)"
     ans = gets.chomp.downcase
     if ans == 'y' 
@@ -26,6 +33,7 @@ module Input
       save_game?
     end
   end
+=end
 
   
 
