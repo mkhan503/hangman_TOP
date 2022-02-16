@@ -1,0 +1,5 @@
+require_relative 'save.rb'
+require_relative 'output.rb'
+require_relative 'input.rb'
+require_relative 'check_guess.rb'
+require_relative 'class_hangman.rb'
