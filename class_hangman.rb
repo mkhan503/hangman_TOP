@@ -12,22 +12,30 @@ class Hangman
     display_initial_message
     game_status = new_or_saved
     if game_status == 'new'
-      @word = select_word.split('') 
-      @letter_display = []
-      @display_grid = {}
-      @incorrect_guesses = []
-      @tries = 6
+     initialize_new_game
     else
-      data = YAML.load File.read(game_status)
+      initialize_saved_game(game_status)
+    end
+    @guess = ''
+    display
+    get_input
+  end
+
+  def initialize_new_game
+    @word = select_word.split('') 
+    @letter_display = []
+    @display_grid = {}
+    @incorrect_guesses = []
+    @tries = 6
+  end
+
+  def initialize_saved_game(file_name)
+    data = YAML.load File.read(file_name)
       @word = data[:word]
       @letter_display = data[:letter_display]
       @display_grid = data[:display_grid]
       @incorrect_guesses = data[:incorrect_guesses]
       @tries = data[:tries]
-    end
-    @guess = ''
-    display
-    get_input
   end
 
   def select_word
@@ -55,7 +63,6 @@ class Hangman
       puts 'Invalid Input'
       new_or_saved
     end
-    
   end
 
   def get_game_name

@@ -22,9 +22,6 @@ module Output
     puts 
     puts @letter_display.join('  ')
     puts "\nIncorrect guesses: #{@incorrect_guesses.join(' ')}" if @incorrect_guesses.length > 0
-    unless @tries == 0 
-      
-    end
   end
 
   def play_again?(string)
